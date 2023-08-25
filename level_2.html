@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #72b090; /* Light blue background */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+
+    }
+    canvas {
+      max-width: 100%;
+      height: auto;
+      width: auto\9; /* IE8-9 fix */
+    }
+    #gameCanvas{
+      background-color: transparent;
+    }
+    .card {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 300px;
+      height: 200px;
+      background-color: #a5eea5; /* Light purple card background */
+      border: 1px solid #189118; /* Pink border */
+      padding: 20px;
+      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+      text-align: center;
+      display: none;
+      font-family: Arial, sans-serif;
+      font-size: 16px;
+    }
+    .card h3 {
+      color: #189118; /* Pink text color */
+    }
+    .card p {
+      color: #660066; /* Purple text color */
+    }
+    .card input {
+      width: 100%;
+      padding: 5px;
+      margin-top: 10px;
+    }
+    .card button {
+      margin-top: 10px;
+      padding: 8px 20px;
+      background-color: #189118; /* Pink button background */
+      border: none;
+      color: #ffffff; /* White button text color */
+      font-size: 16px;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+    .card button:hover {
+      background-color: #189118; /* Lighter pink on hover */
+    }
+    .card.flipped {
+      /* Add this style to center the content inside the flipped card */
+      justify-content: center;
+      align-items: center;
+    }
+    .card.flipped .front {
+      transform: rotateY(180deg);
+    }
+    .card.flipped .back {
+      transform: rotateY(0);
+    }
+    .card .front,
+    .card .back {
+      backface-visibility: hidden;
+
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%; /* Set the width to 100% to fill the entire card */
+      height: 100%; /* Set the height to 100% to fill the entire card */
+      display: flex; /* Use flexbox to center the content */
+      justify-content: center; /* Center horizontally */
+      align-items: center;
+    }
+    .card .front-content,
+    .card .back-content {
+      /* Add this style to keep the front and back content centered while maintaining the layout */
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+    .card .front {
+      z-index: 2;
+    }
+    .card .back {
+      transform: rotateY(180deg);
+      background-color: #a5eea5; /* Light purple card background */
+      color: #660066; /* Purple text color */
+      z-index: 1;
+    }
+    #btns{
+      display: flex;
+      gap:10px;
+    }
+    .menu {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background-image: url("bg.jpg");
+      z-index: 1000;
+      transition: transform 0.3s ease-in-out;
+
+    }
+
+    .menu ul {
+      list-style: none;
+      padding: 0; /* Remove default padding from the ul element */
+    }
+
+    .menu ul li {
+      margin: 10px 0; /* Add some vertical spacing between menu items */
+    }
+
+    .menu ul li a {
+      text-decoration: none;
+      font-size: 24px;
+      color: white;
+      display: block; /* Make the links expand to fill the menu width */
+      padding: 10px 20px; /* Add padding for better click area */
+    }
+
+    .menu ul li a:hover {
+      color: #8A9A5B;
+      background-color: #f0f0f0; /* Add a background color on hover */
+    }
+    #title{
+      position: absolute;
+
+    }
+    @media screen and (min-width: 768px) {
+      /* Increase width of the menu for tablets and larger screens */
+      .menu {
+        width: 20%;
+      }
+
+      /* Move the title down on larger screens */
+      #title {
+        margin-top: 700px;
+        color: mintcream;
+      }
+
+      /* Additional styles for tablet and larger screens */
+    }
+
+    @media screen and (min-width: 1024px) {
+      /* Additional styles for larger screens */
+    }
+    #diam{
+      width: 30px;
+      height: 25px;
+      border: 2px solid mintcream;
+      border-radius: 5px;
+      text-align: center;
+
+    }
+    #diamonds {
+      position: absolute;
+      top: 40px; /* Adjust the top position as needed */
+      right: 200px; /* Adjust the right position as needed */
+      display: flex; /* To align the text vertically within the div */
+      align-items: center; /* To vertically center the text */
+      color: white;
+      gap: 10px/* Set the text color */
+    }
+    /* Rest of the styles, including the card, as shown in the previous code */
+  </style>
+  <title>Fun Labyrinth Game</title>
+</head>
+<body>
+<div class="menu">
+  <ul>
+    <li><a href="home.html">Почетна</a></li>
+    <li><a href="level_1.html">Игра</a></li>
+    <li><a href="media_literacy.html">Медиумска писменост</a></li>
+    <li><a href="fake.html">Лажни информации</a></li>
+
+  </ul>
+</div>
+<div id="title">
+  <h1>Level 2</h1>
+</div>
+<div id="diamonds">
+  <div id="diam">0</div> <i class="fa fa-diamond" style="font-size:30px"></i>
+</div>
+<div class="card" id="questionCard">
+  <!-- Your question card HTML here -->
+  <div class="front">
+    <div class="front-content">
+      <h3>Вистина или лага?</h3>
+      <p>Важно е секогаш да проверувате дали веб страната има референци до други сигурни извори пред да верувате во информациите</p>
+      <div id="btns">
+        <button id="true" onclick="checkAnswer(id)">Вистина</button>
+        <button id="false" onclick="checkAnswer(id)">Лага</button>
+      </div>
+
+    </div>
+  </div>
+  <div class="back" >
+    <div class="back-content">
+      <p id="result" onclick="anotherpage()"></p>
+    </div>
+
+  </div>
+</div>
+<canvas id="gameCanvas" width="600" height="600" ></canvas>
+
+<script>
+  const canvas = document.getElementById("gameCanvas");
+  const ctx = canvas.getContext("2d");
+  const cellSize = 40;
+  const mazeRows = 15;
+  const mazeCols = 15;
+  var val=parseInt(localStorage.getItem("diamonds"))
+  document.getElementById("diam").innerHTML=val
+
+
+  const player = {
+    x: 0,
+    y: 0,
+  };
+
+  const goal = {
+    x: mazeCols - 1,
+    y: mazeRows - 1,
+  };
+
+  const maze = [
+    // Your maze data here
+    [0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+    [1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+    [1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1],
+    [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+    [1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1],
+    [1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 1, 0, 1],
+    [1, 0, 1, 1, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 1],
+    [1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 1, 1, 1, 1],
+    [1, 0, 1, 1, 1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1],
+    [1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 1, 1],
+    [1, 1, 1, 0, 1, 1, 1, 0, 1, 0, 1, 0, 0, 0, 1],
+    [1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1],
+    [1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 0, 1],
+    [1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 1],
+    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0],
+  ];
+
+  let playerImage;
+  let goalImage;
+  let wallImage;
+  let backgroundImage;
+
+  async function loadImages() {
+    playerImage = await loadImage("walk.png");
+    goalImage = await loadImage("treasure.png");
+    wallImage = await loadImage("tree-2.png");
+    backgroundImage = await loadImage("forest.jpg");
+
+    drawGame();
+  }
+
+  function loadImage(imageSrc) {
+    return new Promise((resolve, reject) => {
+      const image = new Image();
+      image.onload = () => resolve(image);
+      image.onerror = (error) => reject(error);
+      image.src = imageSrc;
+    });
+  }
+
+  function drawMaze() {
+    for (let i = 0; i < mazeRows; i++) {
+      for (let j = 0; j < mazeCols; j++) {
+        if (maze[i][j] === 1) {
+          ctx.drawImage(backgroundImage, j * cellSize, i * cellSize, cellSize, cellSize);
+          ctx.drawImage(wallImage, j * cellSize, i * cellSize, cellSize, cellSize);
+        } else {
+          ctx.drawImage(backgroundImage, j * cellSize, i * cellSize, cellSize, cellSize);
+        }
+      }
+    }
+  }
+
+  function drawPlayer() {
+    ctx.drawImage(playerImage, player.y * cellSize, player.x * cellSize, cellSize, cellSize);
+  }
+
+  function drawGoal() {
+    ctx.drawImage(goalImage, goal.y * cellSize, goal.x * cellSize, cellSize, cellSize);
+  }
+
+  function checkCollision(x, y) {
+    return x >= 0 && x < mazeRows && y >= 0 && y < mazeCols && maze[x][y] === 0;
+  }
+
+  function movePlayer(direction) {
+    const newX = player.x + direction[0];
+    const newY = player.y + direction[1];
+
+    if (checkCollision(newX, newY)) {
+      player.x = newX;
+      player.y = newY;
+      drawGame();
+      if (player.x === goal.x && player.y === goal.y) {
+        showQuestionCard();
+      }
+    }
+  }
+
+  function drawGame() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    drawMaze();
+    drawPlayer();
+    drawGoal();
+  }
+
+  function showQuestionCard() {
+    const card = document.getElementById("questionCard");
+    card.style.display = "block";
+  }
+  function anotherpage(){
+    window.location.href="level_3.html"
+  }
+  function hideQuestionCard() {
+    const card = document.getElementById("questionCard");
+    card.style.display = "none";
+  }
+  function flipCard() {
+    const card = document.getElementById("questionCard");
+    card.classList.toggle("flipped");
+  }
+
+  let cardFlipped = false;
+
+  function checkAnswer(id) {
+    const card = document.getElementById("questionCard");
+    const res = document.getElementById("result");
+    var diamonds=document.getElementById("diam")
+    if (id == "true") {
+
+      res.innerHTML = "Точно така! Секогаш треба да ги проверуваме референците коишто најчесто стојат на крајот на текстот.";
+      diamonds.innerHTML=parseInt(diamonds.innerHTML)+5
+      val=val+5
+      localStorage.setItem("diamonds",val)
+    } else {
+      res.innerHTML = "Внимавај! Треба да ти стане навика да ги проверуваш референците на крајот на статијата/документот";
+    }
+    flipCard();
+
+    if (cardFlipped) {
+      // Hide the card and navigate to another page
+      hideQuestionCard();
+      cardFlipped = false;
+      // Redirect to another page (change 'another_page.html' to the actual URL)
+      window.location.href = "level_3.html";
+    } else {
+      cardFlipped = true;
+    }
+  }
+
+  document.addEventListener("keydown", (event) => {
+    switch (event.keyCode) {
+      case 37: // Left arrow key
+        movePlayer([0, -1]);
+        break;
+      case 38: // Up arrow key
+        movePlayer([-1, 0]);
+        break;
+      case 39: // Right arrow key
+        movePlayer([0, 1]);
+        break;
+      case 40: // Down arrow key
+        movePlayer([1, 0]);
+        break;
+    }
+  });
+  loadImages();
+
+</script>
+</body>
+</html>

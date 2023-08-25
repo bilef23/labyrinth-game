@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700,800,900&display=swap');
+    *
+    {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+    header
+    {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      padding: 40px 100px;
+      z-index: 1000;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    header .logo
+    {
+      color: #fff;
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+    .toggle
+    {
+      position: relative;
+      width: 60px;
+      height: 60px;
+      background: url(https://i.ibb.co/HrfVRcx/menu.png);
+      background-repeat: no-repeat;
+      background-size: 30px;
+      background-position: center;
+      cursor: pointer;
+    }
+    .toggle.active
+    {
+      background: url(https://i.ibb.co/rt3HybH/close.png);
+      background-repeat: no-repeat;
+      background-size: 25px;
+      background-position: center;
+      cursor: pointer;
+    }
+    .showcase
+    {
+      position: absolute;
+      right: 0;
+      width: 100%;
+      min-height: 100vh;
+      padding: 100px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #111;
+      transition: 0.5s;
+      z-index: 2;
+    }
+    .showcase.active
+    {
+      right: 300px;
+    }
+
+    .showcase video
+    {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.8;
+    }
+    .overlay
+    {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #8A9A5B;
+      mix-blend-mode: overlay;
+    }
+    .text
+    {
+      position: relative;
+      z-index: 10;
+    }
+
+    .text h2
+    {
+      font-size: 3em;
+      font-weight: 800;
+      color: #fff;
+      line-height: 1em;
+      text-transform: uppercase;
+    }
+    .text h3
+    {
+      font-size: 2em;
+      font-weight: 700;
+      color: #fff;
+      line-height: 1em;
+      text-transform: uppercase;
+    }
+    .text p
+    {
+      font-size: 1.1em;
+      color: #fff;
+      margin: 20px 0;
+      font-weight: 400;
+      max-width: 700px;
+    }
+    .text a
+    {
+      display: inline-block;
+      font-size: 1em;
+      background: #fff;
+      padding: 10px 30px;
+      text-transform: uppercase;
+      text-decoration: none;
+      font-weight: 500;
+      margin-top: 10px;
+      color: #111;
+      letter-spacing: 2px;
+      transition: 0.2s;
+    }
+    .text a:hover
+    {
+      letter-spacing: 6px;
+    }
+    .social
+    {
+      position: absolute;
+      z-index: 10;
+      bottom: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .social li
+    {
+      list-style: none;
+    }
+    .social li a
+    {
+      display: inline-block;
+      margin-right: 20px;
+      filter: invert(1);
+      transform: scale(0.5);
+      transition: 0.5s;
+    }
+    .social li a:hover
+    {
+      transform: scale(0.5) translateY(-15px);
+    }
+    .menu
+    {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 300px;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-image: url("bg.jpg");
+    }
+    .menu ul
+    {
+      position: relative;
+    }
+    .menu ul li
+    {
+      list-style: none;
+    }
+    .menu ul li a
+    {
+      text-decoration: none;
+      font-size: 24px;
+      color: #111;
+    }
+    .menu ul li a:hover
+    {
+      color: #8A9A5B;
+    }
+
+    @media (max-width: 991px)
+    {
+      .showcase,
+      .showcase header
+      {
+        padding: 40px;
+      }
+      .text h2
+      {
+        font-size: 3em;
+      }
+      .text h3
+      {
+        font-size: 2em;
+      }
+    }
+
+  </style>
+</head>
+<body>
+<!-- Video Source -->
+<!-- https://www.pexels.com/video/aerial-view-of-beautiful-resort-2169880/ -->
+<section class="showcase">
+  <header>
+    <h2 class="logo">Учиме за медиумска писменост</h2>
+    <div class="toggle"></div>
+  </header>
+  <video src="https://traversymedia.com/downloads/videos/explore.mp4" muted loop autoplay></video>
+  <div class="overlay"></div>
+  <div class="text">
+    <h2>Што всушност значи терминот </h2>
+    <h3>медиумска писменост?</h3>
+    <p class="container">
+      Здраво на сите! Дали некогаш сте се запрашале зошто некои работи што ги гледате на ТВ, интернет или дури и во списанија можеби не се секогаш вистинити? Па, тука доаѓа во игра нешто супер кул наречено „медиумска писменост“! 🌟</p>
+    <p class="container">
+      Медиумската писменост е како да имате супермоќ која ви помага да разберете, да размислувате критички и да правите паметни избори кога гледате видеа, читате написи или дури разговарате со пријателите на интернет. Замислете дека сте детектив, а вашата мисија е да ги откриете тајните зад она што го гледате и слушате во медиумите.
+    </p>
+    <p>
+      Замислете ги медиумите како огромна загатка составена од слики, зборови, звуци и видеа. Понекогаш, парчињата од сложувалката може точно да се вклопат заедно, и ќе добиете јасна слика за тоа што се случува. Но, во други времиња, некој може да се обиде да ве измами користејќи парчиња сложувалки што навистина не припаѓаат!
+    </p>
+    <p>1. Поставувајте прашања: Секогаш кога ќе видите нешто интересно или шокантно, поставете си прашања како: Кој го направил ова? Зошто успеаја? Дали сакаат да ве информираат, забавуваат или убедуваат? <p>
+
+     <p> 2. Проверете ги изворите: Замислете дека сте во магична библиотека каде секоја книга има автор. Па, секој медиум има и креатор! Осигурајте се да дознаете кој стои зад информациите што ги гледате и дали тие се експерти за темата.</p>
+
+      <p>3. Барајте слаби страни: Исто како да наоѓате скриени богатства, барајте слаби страни кои би можеле да ви кажат дали нешто е вистинско или лажно. Дали таа фотографија изгледа малку премногу совршено? Дали приказната звучи премногу неверојатно за да биде вистинита?</p>
+
+     <p> 4. Рамнотежа на различни страни на приказната: Понекогаш медиумите можат да прикажат само една страна од приказната. Бидете фер истражувач барајќи различни мислења и перспективи. На тој начин, ќе добиете подобро разбирање за тоа што навистина се случува.</p>
+
+
+     <p> Запомнете, да се биде медиумски писмен е како да имате сопствена мапа на богатство. Тоа ви помага да се движите низ возбудливиот свет на информации и забава додека се уверувате дека го правите најдобриот избор за вас.
+
+      Значи, без разлика дали гледате смешно видео, читате напис за вашето омилено животно или учите за нови места, задржете ги силните велесили на вашата медиумска писменост. Вие сте во епска авантура за да станете вешт истражувач на дигиталниот свет! 🌐🔍🎉</p>
+
+  </div>
+  <ul class="social">
+    <li><a href="#"><img src="https://i.ibb.co/x7P24fL/facebook.png"></a></li>
+    <li><a href="#"><img src="https://i.ibb.co/Wnxq2Nq/twitter.png"></a></li>
+    <li><a href="#"><img src="https://i.ibb.co/ySwtH4B/instagram.png"></a></li>
+  </ul>
+</section>
+<div class="menu">
+  <ul>
+    <li><a href="home.html">Почетна</a></li>
+    <li><a href="level_1.html">Игра</a></li>
+    <li><a href="media_literacy.html">Медиумска писменост</a></li>
+    <li><a href="fake.html">Лажни информации</a></li>
+
+  </ul>
+</div>
+
+<script>
+  const menuToggle = document.querySelector('.toggle');
+  const showcase = document.querySelector('.showcase');
+
+  menuToggle.addEventListener('click', () => {
+    menuToggle.classList.toggle('active');
+    showcase.classList.toggle('active');
+  })
+</script>
+</body>
+</html>

@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #8A9A5B; /* Light blue background */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    canvas {
+      border: 1px solid black;
+    }
+    #gameCanvas{
+      background-color: transparent;
+    }
+    .card {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 300px;
+      height: 200px;
+      background-color: #a5eea5; /* Light purple card background */
+      border: 1px solid #189118; /* Pink border */
+      padding: 20px;
+      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+      text-align: center;
+      display: none;
+      font-family: Arial, sans-serif;
+      font-size: 16px;
+    }
+    .card h3 {
+      color: #189118; /* Pink text color */
+    }
+    .card p {
+      color: #660066; /* Purple text color */
+    }
+    .card input {
+      width: 100%;
+      padding: 5px;
+      margin-top: 10px;
+    }
+    .card button {
+      margin-top: 10px;
+      padding: 8px 20px;
+      background-color: #189118; /* Pink button background */
+      border: none;
+      color: #ffffff; /* White button text color */
+      font-size: 16px;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+    .card button:hover {
+      background-color: #189118; /* Lighter pink on hover */
+    }
+    .card.flipped {
+      /* Add this style to center the content inside the flipped card */
+      justify-content: center;
+      align-items: center;
+    }
+    .card.flipped .front {
+      transform: rotateY(180deg);
+    }
+    .card.flipped .back {
+      transform: rotateY(0);
+    }
+    .card .front,
+    .card .back {
+      backface-visibility: hidden;
+      transition: transform 0.5s;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%; /* Set the width to 100% to fill the entire card */
+      height: 100%; /* Set the height to 100% to fill the entire card */
+      display: flex; /* Use flexbox to center the content */
+      justify-content: center; /* Center horizontally */
+      align-items: center;
+    }
+    .card .front-content,
+    .card .back-content {
+      /* Add this style to keep the front and back content centered while maintaining the layout */
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+    .card .front {
+      z-index: 2;
+    }
+    .card .back {
+      transform: rotateY(180deg);
+      background-color: #a5eea5; /* Light purple card background */
+      color: #660066; /* Purple text color */
+      z-index: 1;
+    }
+    #btns{
+      display: flex;
+      gap:10px;
+    }
+
+    /* Rest of the styles, including the card, as shown in the previous code */
+  </style>
+  <title>Fun Labyrinth Game</title>
+</head>
+<body>
+
+<canvas id="gameCanvas" width="600" height="600" ></canvas>
+<div class="card" id="questionCard">
+  <!-- Your question card HTML here -->
+  <div class="front">
+    <div class="front-content">
+      <h3>Вистинска или лажна вест?</h3>
+      <p>Ќе добиеме 10ки</p>
+      <div id="btns">
+        <button id="true" onclick="checkAnswer(id)">Вистина</button>
+        <button id="false" onclick="checkAnswer(id)">Лага</button>
+      </div>
+
+    </div>
+  </div>
+  <div class="back">
+    <div class="back-content">
+      <p id="result"></p>
+    </div>
+
+  </div>
+</div>
+
+
+<script>
+  const canvas = document.getElementById("gameCanvas");
+  const ctx = canvas.getContext("2d");
+  const cellSize = 40;
+  const mazeRows = 15;
+  const mazeCols = 15;
+
+  const player = {
+    x: 0,
+    y: 0,
+  };
+
+  const goal = {
+    x: mazeCols - 1,
+    y: mazeRows - 1,
+  };
+
+  const maze = [
+    // Your maze data here
+    [0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+    [1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+    [1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1],
+    [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1],
+    [1, 0, 0, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 1],
+    [1, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1],
+    [1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 1, 1, 1, 1],
+    [1, 0, 1, 1, 1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1],
+    [1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 1, 1, 1],
+    [1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 0, 0, 0, 1],
+    [1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 1],
+    [1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 0, 1],
+    [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1],
+    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0],
+  ];
+
+  let playerImage;
+  let goalImage;
+  let wallImage;
+  let backgroundImage;
+
+  async function loadImages() {
+    playerImage = await loadImage("walk.png");
+    goalImage = await loadImage("treasure.png");
+    wallImage = await loadImage("tree-2.png");
+    backgroundImage = await loadImage("forest.jpg");
+
+    drawGame();
+  }
+
+  function loadImage(imageSrc) {
+    return new Promise((resolve, reject) => {
+      const image = new Image();
+      image.onload = () => resolve(image);
+      image.onerror = (error) => reject(error);
+      image.src = imageSrc;
+    });
+  }
+
+  function drawMaze() {
+    for (let i = 0; i < mazeRows; i++) {
+      for (let j = 0; j < mazeCols; j++) {
+        if (maze[i][j] === 1) {
+          ctx.drawImage(backgroundImage, j * cellSize, i * cellSize, cellSize, cellSize);
+          ctx.drawImage(wallImage, j * cellSize, i * cellSize, cellSize, cellSize);
+        } else {
+          ctx.drawImage(backgroundImage, j * cellSize, i * cellSize, cellSize, cellSize);
+        }
+      }
+    }
+  }
+
+  function drawPlayer() {
+    ctx.drawImage(playerImage, player.y * cellSize, player.x * cellSize, cellSize, cellSize);
+  }
+
+  function drawGoal() {
+    ctx.drawImage(goalImage, goal.y * cellSize, goal.x * cellSize, cellSize, cellSize);
+  }
+
+  function checkCollision(x, y) {
+    return x >= 0 && x < mazeRows && y >= 0 && y < mazeCols && maze[x][y] === 0;
+  }
+
+  function movePlayer(direction) {
+    const newX = player.x + direction[0];
+    const newY = player.y + direction[1];
+
+    if (checkCollision(newX, newY)) {
+      player.x = newX;
+      player.y = newY;
+      drawGame();
+      if (player.x === goal.x && player.y === goal.y) {
+        showQuestionCard();
+      }
+    }
+  }
+
+  function drawGame() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    drawMaze();
+    drawPlayer();
+    drawGoal();
+  }
+
+  function showQuestionCard() {
+    const card = document.getElementById("questionCard");
+    card.style.display = "block";
+  }
+
+  function hideQuestionCard() {
+    const card = document.getElementById("questionCard");
+    card.style.display = "none";
+  }
+  function flipCard() {
+    const card = document.getElementById("questionCard");
+    card.classList.toggle("flipped");
+  }
+
+  function checkAnswer(id) {
+    const card = document.getElementById("questionCard");
+    const res = document.getElementById("result");
+    if (id == "true") {
+      res.innerHTML = "Точен одговор";
+    } else {
+      res.innerHTML = "Обиди се повторно";
+    }
+    flipCard();
+    setTimeout(hideQuestionCard, 1500); // Hide the card after 1.5 seconds (1500ms)
+  }
+
+  document.addEventListener("keydown", (event) => {
+    switch (event.keyCode) {
+      case 37: // Left arrow key
+        movePlayer([0, -1]);
+        break;
+      case 38: // Up arrow key
+        movePlayer([-1, 0]);
+        break;
+      case 39: // Right arrow key
+        movePlayer([0, 1]);
+        break;
+      case 40: // Down arrow key
+        movePlayer([1, 0]);
+        break;
+    }
+  });
+
+  loadImages();
+</script>
+</body>
+</html>
